@@ -1,13 +1,38 @@
 [
   {
-    "name": "week",
-    "title": "This week",
-    "subtitle": "Library Circulation for Claude Code: what needs attention, rendered by npm run view",
+    "name": "circulation",
+    "title": "Circulation desk",
+    "subtitle": "Private staff review. Dates use UTC calendar days.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Overdue loans",
+        "sql": "SELECT barcode,title,borrower,branch,due_on,overdue_days FROM circulation WHERE returned_on IS NULL AND overdue_days>0 ORDER BY overdue_days DESC"
+      },
+      {
+        "title": "Hold queue",
+        "sql": "SELECT title,borrower,pickup_branch,state,pickup_until FROM hold_queue ORDER BY title,queue_position"
+      }
+    ]
+  },
+  {
+    "name": "collection",
+    "title": "Collection review",
+    "sections": [
+      {
+        "title": "Copies and demand",
+        "sql": "SELECT barcode,title,branch,condition,loans_count,last_issue,waiting FROM collection_review ORDER BY barcode",
+        "note": "Counts describe the records imported or entered here, not an unseen full circulation history."
+      }
+    ]
+  },
+  {
+    "name": "privacy",
+    "title": "Borrower record review",
+    "sections": [
+      {
+        "title": "Evidence to review",
+        "sql": "SELECT borrower,rule,finding FROM compliance_review ORDER BY borrower,rule",
+        "note": "Evidence prompts support privacy review. They do not certify legal compliance."
       }
     ]
   }

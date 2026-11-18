@@ -1,0 +1,17 @@
+npm run library -- overdues
+  barcode  title            borrower  branch  due on      overdue days
+  -------  ---------------  --------  ------  ----------  ------------
+  C001     Coastal Gardens  B001      DEMO    2026-11-09  9           
+
+npm run library -- pull-list
+  hold id                               title            borrower  pickup branch  barcode  current branch
+  ------------------------------------  ---------------  --------  -------------  -------  --------------
+  8517c4a1-0a0b-49b9-a6c9-9c6de7a187dd  Coastal Gardens  B002      DEMO           C002     ANNEX         
+
+npm run library -- compliance
+  borrower  rule       finding                                            
+  --------  ---------  ---------------------------------------------------
+  B003      EVIDENCE   Record the reference supporting the privacy review 
+  B003      PURPOSE    Record why this borrower information is necessary  
+  B003      RETENTION  Review the continuing need for this borrower record
+

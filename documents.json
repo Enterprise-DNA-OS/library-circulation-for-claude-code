@@ -1,11 +1,51 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "overdue-notice",
+    "title": "Draft overdue notice",
+    "for_each": "SELECT DISTINCT b.id,b.code FROM borrowers b JOIN loans l ON l.borrower_id=b.id WHERE l.returned_on IS NULL AND l.due_on<CURRENT_DATE",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Borrower",
+        "sql": "SELECT code,name FROM borrowers WHERE id=$1",
+        "layout": "record"
+      },
+      {
+        "title": "Please check these outstanding loans",
+        "sql": "SELECT c.barcode,t.name title,l.due_on FROM loans l JOIN copies c ON c.id=l.copy_id JOIN titles t ON t.id=c.title_id WHERE l.borrower_id=$1 AND l.returned_on IS NULL AND l.due_on<CURRENT_DATE ORDER BY l.due_on",
+        "note": "Draft only. A librarian checks the dates and contact details before delivery. No fine or payment is requested."
+      }
+    ]
+  },
+  {
+    "name": "hold-slip",
+    "title": "Hold collection slip",
+    "for_each": "SELECT id,source_key FROM holds WHERE state='ready'",
+    "file": "source_key",
+    "sections": [
+      {
+        "title": "Ready for collection",
+        "sql": "SELECT title,borrower,pickup_branch,barcode,pickup_until FROM hold_queue WHERE id=$1",
+        "layout": "record",
+        "note": "Private staff copy. Check whether the collection deadline has passed before handing over."
+      }
+    ]
+  },
+  {
+    "name": "branch-review",
+    "title": "Branch circulation review",
+    "for_each": "SELECT id,code FROM branches",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Branch rules",
+        "sql": "SELECT name,loan_days,max_loans,max_renewals,pickup_days FROM branches WHERE id=$1",
+        "layout": "record"
+      },
+      {
+        "title": "Copies",
+        "sql": "SELECT v.barcode,v.title,v.condition,v.loans_count,v.last_issue,v.waiting FROM collection_review v JOIN copies c ON c.id=v.id WHERE c.branch_id=$1 ORDER BY v.barcode"
+      }
     ]
   }
 ]

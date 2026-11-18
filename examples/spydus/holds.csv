@@ -1,0 +1,2 @@
+key,title,borrower,branch,requested_on,state,barcode,pickup_until
+EXT-H1,EXT-T2,EXT-B1,DEMO,2026-01-01,waiting,,

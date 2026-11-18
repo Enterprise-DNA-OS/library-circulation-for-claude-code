@@ -1,43 +1,57 @@
-# Library Circulation for Claude Code: operating instructions
+# Library Circulation for Claude Code
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+A staffed physical-library lending desk. The fictional Harbour Library seed is for demonstrations only. Read current records before answering.
 
-## Who this is for
+## Routes
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
-
-Fill this in once. A worker with context knows. A worker without it guesses.
-
-## How to work
-
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Command | Job |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| /branches | Read the lending and pickup rules at each branch |
+| /catalogue | Find copies, locations and availability |
+| /borrowers | Review membership status and expiry |
+| /loans | Read current and returned loans |
+| /overdues | Review overdue copies in oldest-first order |
+| /holds | Read waiting and ready holds in queue order |
+| /pull-list | Find copies for the first waiting hold on each title |
+| /collection-review | Review copy usage and waiting demand |
+| /compliance | Check borrower purpose, review date and supporting evidence |
+| /attention | Review overdue loans, expired pickups and privacy gaps |
+| /imports | Reconcile import batches and record counts |
+| /audit | Read the operator action trail |
+| /history | Read a copy and its lending, note and action history |
+| /insights | Answer ten joined circulation questions |
+| /weekly-review | Prepare Monday review from overdues, holds and compliance |
+| /add-branch | Add a branch with its lending rules |
+| /add-title | Add a bibliographic title |
+| /add-copy | Accession a physical copy at a branch |
+| /add-borrower | Register a borrower with purpose and review evidence |
+| /borrower-status | Record a membership status decision |
+| /review-privacy | Record a reviewed purpose, date and evidence |
+| /checkout | Lend an eligible copy to an eligible borrower |
+| /return | Record a copy returned at its current branch |
+| /renew | Extend an open loan when rules and other holds permit |
+| /hold | Join the title hold queue for a pickup branch |
+| /ready-hold | Allocate a local copy to the first waiting borrower |
+| /cancel-hold | Release a waiting or ready hold with a reason |
+| /move-copy | Record a completed physical transfer between branches |
+| /copy-condition | Record repair, withdrawal or return to circulation |
+| /log | Record an operational note about a copy |
+| /import | Preview and import mapped Spydus CSV reports |
+| /export | Write a complete structured database export |
+| /draft-overdues | Write a private overdue review draft without sending |
+| /customise | Change a field or lending rule |
+| /new-view | Add a private read-only report |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
+## Working rules
 
-## Hard rules
+- Read docs/cli.md before writes and docs/replace-spydus.md before imports. Quote values containing spaces.
+- Use the one CLI. Never guess a copy, borrower or title. Ambiguous names list candidates and exit with failure.
+- Every write records an operator label. This is a trusted operator workspace, not an authenticated multi-user service.
+- Never send, charge money, publish, delete records or contact Spydus from this base. Drafts stay in drafts/. Reports stay in views/ and docs-out/.
+- Dates are UTC calendar days. Lending and pickup periods are local business policy, never statutory claims.
+- A return records the current holding branch. Use move-copy after physical receipt at another branch. Do not claim to track a van or an item in transit.
+- DATABASE_URL selects PostgreSQL. Otherwise DATA_DIR selects PGlite. Never run seed against real records. Tests and demo isolate their data and ignore DATABASE_URL.
+- Back up with export before changes. Add a numbered migration rather than editing one already applied.
+- Borrower details and reading histories are private. Review purpose and retention. Do not collect addresses, emails or dates of birth by default.
 
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off Spydus.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/spydus
+Omni by Enterprise DNA installs and runs custom versions: https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=spydus&utm_medium=github
