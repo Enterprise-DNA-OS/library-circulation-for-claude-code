@@ -6,7 +6,7 @@ BEGIN
  INSERT INTO branches(code,name) VALUES('DEMO','Harbour Library') RETURNING id INTO br;
  INSERT INTO branches(code,name) VALUES('ANNEX','Ridge Reading Room') RETURNING id INTO annex;
  INSERT INTO titles(code,name,author,isbn) VALUES('T001','Coastal Gardens','Aroha Moss','9780000000001') RETURNING id INTO t1;
- INSERT INTO titles(code,name,author) VALUES('T002','Local History <script>demo</script>','Leo Brook') RETURNING id INTO t2;
+ INSERT INTO titles(code,name,author) VALUES('T002','Local History Almanac','Leo Brook') RETURNING id INTO t2;
  INSERT INTO titles(code,name,author) VALUES('T003','Night Sky Notebook','Mina Vale') RETURNING id INTO t3;
  INSERT INTO borrowers(code,name,expires_on,purpose,review_on,evidence) VALUES('B001','Maya Harbour',CURRENT_DATE+365,'Physical library lending',CURRENT_DATE+90,'Demo policy v1') RETURNING id INTO p1;
  INSERT INTO borrowers(code,name,expires_on,purpose,review_on,evidence) VALUES('B002','Maya Ridge',CURRENT_DATE+365,'Physical library lending',CURRENT_DATE+90,'Demo policy v1') RETURNING id INTO p2;
